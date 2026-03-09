@@ -11,7 +11,7 @@ $name = $_SESSION['display_name'] ?? 'Admin';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Employees - Prototype</title>
+    <title>Admin Employees</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -50,9 +50,8 @@ $name = $_SESSION['display_name'] ?? 'Admin';
         <aside class="col-12 col-md-3 col-lg-2 eg-sidebar py-4">
           <nav class="nav flex-column gap-2">
             <a href="dashboard.php" class="eg-sidebar-link">Dashboard</a>
-            <a href="attendance.php" class="eg-sidebar-link">Attendance</a>
-            <a href="payroll.php" class="eg-sidebar-link">Payroll</a>
-            <a href="employees.php" class="eg-sidebar-link active">Employee</a>
+            <a href="scan.php" class="eg-sidebar-link">Scanning</a>
+            <a href="employees.php" class="eg-sidebar-link active">Employees</a>
             <a href="../auth/logout.php" class="eg-sidebar-link text-danger mt-3"
               >Logout</a
             >
@@ -60,7 +59,7 @@ $name = $_SESSION['display_name'] ?? 'Admin';
         </aside>
 
         <main class="col-12 col-md-9 col-lg-10 py-4">
-          <h3 class="mb-4">All Employees (Prototype)</h3>
+          <h3 class="mb-4 fw-bold">All Employees</h3>
           <div class="row g-3">
             <?php
             // simple static loop for prototype cards

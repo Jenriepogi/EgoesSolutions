@@ -11,7 +11,7 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Superadmin Dashboard</title>
+    <title>Super Admin - Employee Accounts</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -38,7 +38,9 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
         </div>
       </div>
       <div class="d-flex align-items-center me-3">
-        <div class="me-2 fw-bold fs-4">Hi <?= htmlspecialchars($name) ?>!</div>
+        <div class="me-2 fw-bold fs-5">
+          SuperAdmin-<?= htmlspecialchars($name) ?>
+        </div>
         <div class="eg-avatar-circle"></div>
       </div>
     </header>
@@ -47,47 +49,60 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
       <div class="row">
         <aside class="col-12 col-md-3 col-lg-2 eg-sidebar py-4">
           <nav class="nav flex-column gap-2">
-            <a href="dashboard.php" class="eg-sidebar-link active">Dashboard</a>
+            <a href="dashboard.php" class="eg-sidebar-link">Dashboard</a>
             <a href="offices.php" class="eg-sidebar-link">Offices</a>
-            <a href="employees.php" class="eg-sidebar-link">Employee Accounts</a>
+            <a href="employees.php" class="eg-sidebar-link active">Employee Accounts</a>
             <a href="payroll.php" class="eg-sidebar-link">Payroll</a>
             <a href="barcodes.php" class="eg-sidebar-link">Employee Barcodes</a>
             <a href="attendance.php" class="eg-sidebar-link">Office Attendance</a>
-            <a href="../auth/logout.php" class="eg-sidebar-link text-danger mt-3">Logout</a>
+            <a href="../auth/logout.php" class="eg-sidebar-link text-danger mt-3"
+              >Logout</a
+            >
           </nav>
         </aside>
 
         <main class="col-12 col-md-9 col-lg-10 py-4">
-          <h3 class="fw-bold">Super Admin Dashboard</h3>
-          <p class="text-muted mb-4">
-            Manage all offices, employee accounts, payroll, barcodes, and attendance records.
-          </p>
-
+          <h3 class="mb-3 fw-bold">Employee Accounts</h3>
+          <p class="text-muted mb-4">Create and manage employee login accounts.</p>
+          <div class="eg-panel p-3 mb-4">
+            <h5 class="mb-3">Create Employee Account</h5>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <input class="form-control" placeholder="Full Name" />
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" placeholder="Username" />
+              </div>
+              <div class="col-md-3">
+                <input type="password" class="form-control" placeholder="Password" />
+              </div>
+              <div class="col-md-2 d-grid">
+                <button class="btn btn-primary">Create</button>
+              </div>
+            </div>
+          </div>
           <div class="row g-3">
-            <div class="col-md-3">
-              <div class="eg-metric-card">
-                <div class="text-muted small">Total Offices</div>
-                <div class="fw-bold fs-4">5</div>
+            <?php
+            // simple static loop for prototype cards
+            $employees = array_fill(0, 12, [
+                'name' => 'Jeriz Bagonia',
+                'position' => 'Team Leader',
+            ]);
+            foreach ($employees as $emp): ?>
+              <div class="col-6 col-md-4 col-lg-3">
+                <div class="eg-employee-card">
+                  <div class="d-flex align-items-center mb-2">
+                    <div class="eg-avatar-circle me-2"></div>
+                    <div>
+                      <div class="fw-semibold"><?= htmlspecialchars($emp['name']) ?></div>
+                      <div class="text-muted small"><?= htmlspecialchars($emp['position']) ?></div>
+                    </div>
+                  </div>
+                  <div class="text-muted small">Position</div>
+                  <div class="fw-semibold small"><?= htmlspecialchars($emp['position']) ?></div>
+                </div>
               </div>
-            </div>
-            <div class="col-md-3">
-              <div class="eg-metric-card">
-                <div class="text-muted small">Employee Accounts</div>
-                <div class="fw-bold fs-4">96</div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="eg-metric-card">
-                <div class="text-muted small">Payroll Batch Status</div>
-                <div class="fw-bold fs-5 text-warning">In Progress</div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="eg-metric-card">
-                <div class="text-muted small">Attendance Logs Today</div>
-                <div class="fw-bold fs-4">88</div>
-              </div>
-            </div>
+            <?php endforeach; ?>
           </div>
         </main>
       </div>
