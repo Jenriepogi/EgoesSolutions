@@ -12,12 +12,16 @@ $name = $_SESSION['display_name'] ?? 'Admin';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Employees</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
   <body class="bg-light">
@@ -47,14 +51,27 @@ $name = $_SESSION['display_name'] ?? 'Admin';
 
     <div class="container-fluid">
       <div class="row">
-        <aside class="col-12 col-md-3 col-lg-2 eg-sidebar py-4">
-          <nav class="nav flex-column gap-2">
-            <a href="dashboard.php" class="eg-sidebar-link">Dashboard</a>
-            <a href="scan.php" class="eg-sidebar-link">Scanning</a>
-            <a href="employees.php" class="eg-sidebar-link active">Employees</a>
-            <a href="../auth/logout.php" class="eg-sidebar-link text-danger mt-3"
-              >Logout</a
-            >
+        <aside class="col-12 col-md-3 col-lg-2 eg-sidebar eg-sidebar-admin py-4">
+          <div class="eg-sidebar-brand px-3 mb-3">
+            <span class="eg-sidebar-role">Office Admin</span>
+          </div>
+          <nav class="nav flex-column gap-1">
+            <a href="dashboard.php" class="eg-sidebar-link">
+              <i class="bi bi-speedometer2"></i>
+              <span>Dashboard</span>
+            </a>
+            <a href="scan.php" class="eg-sidebar-link">
+              <i class="bi bi-upc-scan"></i>
+              <span>Scanning</span>
+            </a>
+            <a href="employees.php" class="eg-sidebar-link active">
+              <i class="bi bi-people"></i>
+              <span>Employees</span>
+            </a>
+            <a href="../auth/logout.php" class="eg-sidebar-link eg-sidebar-link-danger mt-3">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Logout</span>
+            </a>
           </nav>
         </aside>
 

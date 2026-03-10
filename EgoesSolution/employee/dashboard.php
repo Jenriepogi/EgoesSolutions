@@ -12,12 +12,16 @@ $name = $_SESSION['display_name'] ?? 'Employee';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Employee Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
   <body class="bg-light">
@@ -46,14 +50,16 @@ $name = $_SESSION['display_name'] ?? 'Employee';
     </header>
 
     <div class="container-fluid py-4">
-      <ul class="nav nav-tabs mb-3">
-        <li class="nav-item">
-          <a class="nav-link active" href="dashboard.php">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="payslip.php">Payslip Archive</a>
-        </li>
-      </ul>
+      <nav class="eg-employee-nav mb-4">
+        <a href="dashboard.php" class="eg-employee-nav-link active">
+          <i class="bi bi-house-door"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="payslip.php" class="eg-employee-nav-link">
+          <i class="bi bi-receipt"></i>
+          <span>Payslip Archive</span>
+        </a>
+      </nav>
 
       <div class="row g-3">
         <div class="col-lg-4">
