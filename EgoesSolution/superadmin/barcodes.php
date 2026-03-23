@@ -5,6 +5,13 @@ if (($_SESSION['role'] ?? '') !== 'superadmin') {
     exit;
 }
 $name = $_SESSION['display_name'] ?? 'Super Admin';
+
+require_once __DIR__ . '/../config/database.php';
+$barcodes = [];
+if ($pdo->query("SHOW TABLES LIKE 'employees'")->rowCount()) {
+    $stmt = $pdo->query('SELECT e.id, e.employee_code, u.full_name, o.name AS office_name FROM employees e JOIN users u ON e.user_id = u.id LEFT JOIN offices o ON u.office_id = o.id ORDER BY e.employee_code');
+    $barcodes = $stmt->fetchAll();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,16 +29,12 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2"><div class="eg-logo-box">E</div></div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">E-GOES</div>
-          <div class="text-uppercase eg-wordmark-bottom">Solutions</div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-5">SuperAdmin-<?= htmlspecialchars($name) ?></div>
@@ -47,7 +50,7 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
           </div>
           <nav class="nav flex-column gap-1">
             <a href="dashboard.php" class="eg-sidebar-link">
-              <i class="bi bi-grid-1x2"></i>
+              <i class="bi bi-speedometer2"></i>
               <span>Dashboard</span>
             </a>
             <a href="offices.php" class="eg-sidebar-link">
@@ -55,8 +58,8 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
               <span>Offices</span>
             </a>
             <a href="employees.php" class="eg-sidebar-link">
-              <i class="bi bi-person-badge"></i>
-              <span>Employee Accounts</span>
+              <i class="bi bi-people"></i>
+              <span>Employees</span>
             </a>
             <a href="payroll.php" class="eg-sidebar-link">
               <i class="bi bi-currency-dollar"></i>
@@ -93,18 +96,18 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>001</td>
-                  <td>Jane Bagonia</td>
-                  <td>Office A</td>
-                  <td>EGS-001-2026</td>
-                </tr>
-                <tr>
-                  <td>002</td>
-                  <td>Robert Cruz</td>
-                  <td>Office B</td>
-                  <td>EGS-002-2026</td>
-                </tr>
+                <?php if (empty($barcodes)): ?>
+                  <tr><td colspan="4" class="text-muted text-center py-4">No barcodes yet. Employees need employee records with codes.</td></tr>
+                <?php else: ?>
+                  <?php foreach ($barcodes as $b): ?>
+                    <tr>
+                      <td><?= htmlspecialchars($b['id']) ?></td>
+                      <td><?= htmlspecialchars($b['full_name']) ?></td>
+                      <td><?= htmlspecialchars($b['office_name'] ?? '—') ?></td>
+                      <td><?= htmlspecialchars($b['employee_code']) ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
@@ -113,3 +116,9 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
     </div>
   </body>
 </html>
+
+
+
+
+
+

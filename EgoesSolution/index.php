@@ -22,19 +22,7 @@
       <!-- Top Bar / Branding -->
       <header class="eg-topbar">
         <div class="d-flex align-items-center">
-          <div class="me-2">
-            <div class="eg-logo-box">
-              E
-            </div>
-          </div>
-          <div>
-            <div class="fw-bold eg-wordmark-top">
-              E-GOES
-            </div>
-            <div class="text-uppercase eg-wordmark-bottom">
-              Solutions
-            </div>
-          </div>
+          <img src="assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
         </div>
       </header>
 
@@ -66,5 +54,9 @@
     ></script>
   </body>
 </html>
+
+
+
+
 
 

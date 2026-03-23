@@ -22,18 +22,12 @@ $name = $_SESSION['display_name'] ?? 'Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">E</div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">E-GOES</div>
-          <div class="text-uppercase eg-wordmark-bottom">Solutions</div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-5">Admin-<?= htmlspecialchars($name) ?></div>
@@ -91,3 +85,8 @@ $name = $_SESSION['display_name'] ?? 'Admin';
     </div>
   </body>
 </html>
+
+
+
+
+

@@ -1,13 +1,23 @@
 <?php
-// Prototype placeholder for future database connection.
-// In the real system you would configure PDO/MySQLi here.
 
-// Example (commented out):
-// $dsn = 'mysql:host=localhost;dbname=attendance_db;charset=utf8mb4';
-// $user = 'root';
-// $pass = '';
-// $pdo = new PDO($dsn, $user, $pass, [
-//     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-// ]);
+// Central PDO connection for EgoesSolution.
+// Adjust $dbName, $dbUser, $dbPass to match your MySQL setup.
 
+$dbHost = '127.0.0.1';
+$dbPort = '3306';
+$dbName = 'egoessolution';
+$dbUser = 'root';
+$dbPass = ''; // if your root user has a password, put it here
+
+$dsn = "mysql:host={$dbHost};port={$dbPort};dbname={$dbName};charset=utf8mb4";
+
+try {
+    $pdo = new PDO($dsn, $dbUser, $dbPass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+} catch (PDOException $e) {
+    // For now, just stop the script. Later you can log this instead.
+    die('Database connection failed.');
+}
 

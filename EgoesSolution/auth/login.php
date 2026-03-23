@@ -1,5 +1,4 @@
 <?php
-// Prototype login page (no real authentication yet)
 session_start();
 ?>
 <!DOCTYPE html>
@@ -19,19 +18,7 @@ session_start();
   <body class="bg-light">
     <header class="eg-topbar">
       <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
     </header>
 
@@ -48,7 +35,7 @@ session_start();
             >
               <div class="mb-3">
                 <label for="username" class="form-label fw-semibold"
-                  >Username</label
+                  >Email or Username</label
                 >
                 <div class="input-group">
                   <span class="input-group-text">
@@ -59,11 +46,12 @@ session_start();
                     class="form-control"
                     id="username"
                     name="username"
+                    placeholder="e.g. admin@egoes.com or superadmin"
                     required
                     autocomplete="off"
                   />
                   <div class="invalid-feedback">
-                    Please enter your username.
+                    Please enter your email or username.
                   </div>
                 </div>
               </div>
@@ -133,5 +121,9 @@ session_start();
     </script>
   </body>
 </html>
+
+
+
+
 
 

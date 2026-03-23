@@ -11,7 +11,7 @@ $name = $_SESSION['display_name'] ?? 'Admin';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Payroll - Prototype</title>
+    <title>Admin Payroll</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -22,24 +22,12 @@ $name = $_SESSION['display_name'] ?? 'Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-5">
@@ -80,72 +68,36 @@ $name = $_SESSION['display_name'] ?? 'Admin';
         </aside>
 
         <main class="col-12 col-md-9 col-lg-10 py-4">
-          <h3 class="mb-3">Weekly Payroll (Prototype)</h3>
+          <h3 class="mb-3 fw-bold">Payroll</h3>
+          <p class="text-muted small mb-3">Only SuperAdmin generates payroll. Data loaded from database.</p>
           <div class="row mb-3 g-3">
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Total Employees</div>
-                <div class="fw-bold fs-4">96</div>
+                <div class="fw-bold fs-4">0</div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Weekly Gross Pay</div>
-                <div class="fw-bold fs-4">₱100,000.00</div>
+                <div class="fw-bold fs-4">—</div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Weekly Deductions</div>
-                <div class="fw-bold fs-4">₱20,000.00</div>
+                <div class="fw-bold fs-4">—</div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Net Pay</div>
-                <div class="fw-bold fs-4">₱80,000.00</div>
+                <div class="fw-bold fs-4">—</div>
               </div>
             </div>
           </div>
-
-          <div class="table-responsive bg-white rounded-3 shadow-sm p-3">
-            <table class="table table-bordered table-sm align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>EMP ID</th>
-                  <th>Employee Name</th>
-                  <th>Total Hours</th>
-                  <th>Basic Salary</th>
-                  <th>Bonuses</th>
-                  <th>Deductions</th>
-                  <th>Net Pay</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>001</td>
-                  <td>Jane Bagonia</td>
-                  <td>40</td>
-                  <td>₱7,000.00</td>
-                  <td>₱500.00</td>
-                  <td>₱300.00</td>
-                  <td>₱7,200.00</td>
-                  <td>Processed</td>
-                </tr>
-                <tr>
-                  <td>002</td>
-                  <td>Robert Cruz</td>
-                  <td>42</td>
-                  <td>₱7,000.00</td>
-                  <td>₱800.00</td>
-                  <td>₱400.00</td>
-                  <td>₱7,400.00</td>
-                  <td>Processing</td>
-                </tr>
-                <!-- More static rows can be added here -->
-              </tbody>
-            </table>
+          <div class="eg-panel">
+            <p class="text-muted small mb-0">Payroll records will appear here once SuperAdmin generates them.</p>
           </div>
         </main>
       </div>
@@ -158,5 +110,10 @@ $name = $_SESSION['display_name'] ?? 'Admin';
     ></script>
   </body>
 </html>
+
+
+
+
+
 
 

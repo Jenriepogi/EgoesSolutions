@@ -5,6 +5,9 @@ if (($_SESSION['role'] ?? '') !== 'superadmin') {
     exit;
 }
 $name = $_SESSION['display_name'] ?? 'Super Admin';
+
+require_once __DIR__ . '/../config/database.php';
+$offices = $pdo->query('SELECT id, name, address FROM offices ORDER BY name')->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,16 +25,12 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2"><div class="eg-logo-box">E</div></div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">E-GOES</div>
-          <div class="text-uppercase eg-wordmark-bottom">Solutions</div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-5">SuperAdmin-<?= htmlspecialchars($name) ?></div>
@@ -47,7 +46,7 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
           </div>
           <nav class="nav flex-column gap-1">
             <a href="dashboard.php" class="eg-sidebar-link">
-              <i class="bi bi-grid-1x2"></i>
+              <i class="bi bi-speedometer2"></i>
               <span>Dashboard</span>
             </a>
             <a href="offices.php" class="eg-sidebar-link active">
@@ -55,8 +54,8 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
               <span>Offices</span>
             </a>
             <a href="employees.php" class="eg-sidebar-link">
-              <i class="bi bi-person-badge"></i>
-              <span>Employee Accounts</span>
+              <i class="bi bi-people"></i>
+              <span>Employees</span>
             </a>
             <a href="payroll.php" class="eg-sidebar-link">
               <i class="bi bi-currency-dollar"></i>
@@ -79,16 +78,40 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
 
         <main class="col-12 col-md-9 col-lg-10 py-4">
           <h3 class="fw-bold mb-3">Office Management</h3>
+          <p class="text-muted small mb-3">Only SuperAdmin can create offices. Add Office will save to database when wired.</p>
           <div class="eg-panel p-3 mb-4">
             <h5 class="mb-3">Add New Office</h5>
             <div class="row g-3">
-              <div class="col-md-4"><input class="form-control" placeholder="Office Name" /></div>
-              <div class="col-md-4"><input class="form-control" placeholder="Location" /></div>
-              <div class="col-md-2 d-grid"><button class="btn btn-primary">Add Office</button></div>
+              <div class="col-md-4"><input class="form-control" name="name" placeholder="Office Name" /></div>
+              <div class="col-md-4"><input class="form-control" name="address" placeholder="Location" /></div>
+              <div class="col-md-2 d-grid"><button type="button" class="btn btn-primary" disabled>Add Office (wire to DB)</button></div>
             </div>
+          </div>
+          <div class="eg-panel">
+            <h5 class="mb-3">All Offices</h5>
+            <?php if (empty($offices)): ?>
+              <p class="text-muted small mb-0">No offices yet. Create one above when form is wired to database.</p>
+            <?php else: ?>
+              <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                  <thead class="table-light"><tr><th>Name</th><th>Address</th></tr></thead>
+                  <tbody>
+                    <?php foreach ($offices as $o): ?>
+                      <tr><td><?= htmlspecialchars($o['name']) ?></td><td><?= htmlspecialchars($o['address'] ?? '—') ?></td></tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+              </div>
+            <?php endif; ?>
           </div>
         </main>
       </div>
     </div>
   </body>
 </html>
+
+
+
+
+
+

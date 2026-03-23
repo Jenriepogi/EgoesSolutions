@@ -5,6 +5,10 @@ if (($_SESSION['role'] ?? '') !== 'superadmin') {
     exit;
 }
 $name = $_SESSION['display_name'] ?? 'Super Admin';
+
+require_once __DIR__ . '/../config/database.php';
+$offices = $pdo->query('SELECT id, name FROM offices ORDER BY name')->fetchAll();
+$payrollItems = [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,24 +26,12 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-5">
@@ -57,7 +49,7 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
           </div>
           <nav class="nav flex-column gap-1">
             <a href="dashboard.php" class="eg-sidebar-link">
-              <i class="bi bi-grid-1x2"></i>
+              <i class="bi bi-speedometer2"></i>
               <span>Dashboard</span>
             </a>
             <a href="offices.php" class="eg-sidebar-link">
@@ -65,8 +57,8 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
               <span>Offices</span>
             </a>
             <a href="employees.php" class="eg-sidebar-link">
-              <i class="bi bi-person-badge"></i>
-              <span>Employee Accounts</span>
+              <i class="bi bi-people"></i>
+              <span>Employees</span>
             </a>
             <a href="payroll.php" class="eg-sidebar-link active">
               <i class="bi bi-currency-dollar"></i>
@@ -93,18 +85,19 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
             <div class="row g-3 align-items-end">
               <div class="col-md-4">
                 <label class="form-label">Payroll Period</label>
-                <input type="text" class="form-control" value="Mar 1 - Mar 7, 2026" />
+                <input type="text" class="form-control" placeholder="Select period" />
               </div>
               <div class="col-md-3">
                 <label class="form-label">Office</label>
                 <select class="form-select">
-                  <option>All Offices</option>
-                  <option>Office A</option>
-                  <option>Office B</option>
+                  <option value="">All Offices</option>
+                  <?php foreach ($offices as $o): ?>
+                    <option value="<?= (int)$o['id'] ?>"><?= htmlspecialchars($o['name']) ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
               <div class="col-md-3 d-grid">
-                <button class="btn btn-primary">Generate Payroll</button>
+                <button type="button" class="btn btn-primary" disabled>Generate Payroll (wire to DB)</button>
               </div>
             </div>
           </div>
@@ -112,67 +105,31 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Total Employees</div>
-                <div class="fw-bold fs-4">96</div>
+                <div class="fw-bold fs-4">0</div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Weekly Gross Pay</div>
-                <div class="fw-bold fs-4">₱100,000.00</div>
+                <div class="fw-bold fs-4">—</div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Weekly Deductions</div>
-                <div class="fw-bold fs-4">₱20,000.00</div>
+                <div class="fw-bold fs-4">—</div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Net Pay</div>
-                <div class="fw-bold fs-4">₱80,000.00</div>
+                <div class="fw-bold fs-4">—</div>
               </div>
             </div>
           </div>
 
-          <div class="table-responsive bg-white rounded-3 shadow-sm p-3">
-            <table class="table table-bordered table-sm align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>EMP ID</th>
-                  <th>Employee Name</th>
-                  <th>Total Hours</th>
-                  <th>Basic Salary</th>
-                  <th>Bonuses</th>
-                  <th>Deductions</th>
-                  <th>Net Pay</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>001</td>
-                  <td>Jane Bagonia</td>
-                  <td>40</td>
-                  <td>₱7,000.00</td>
-                  <td>₱500.00</td>
-                  <td>₱300.00</td>
-                  <td>₱7,200.00</td>
-                  <td>Processed</td>
-                </tr>
-                <tr>
-                  <td>002</td>
-                  <td>Robert Cruz</td>
-                  <td>42</td>
-                  <td>₱7,000.00</td>
-                  <td>₱800.00</td>
-                  <td>₱400.00</td>
-                  <td>₱7,400.00</td>
-                  <td>Processing</td>
-                </tr>
-                <!-- More static rows can be added here -->
-              </tbody>
-            </table>
+          <div class="eg-panel">
+            <p class="text-muted small mb-0">Payroll data will appear here once generated from the database.</p>
           </div>
         </main>
       </div>
@@ -185,5 +142,11 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
     ></script>
   </body>
 </html>
+
+
+
+
+
+
 
 

@@ -5,6 +5,13 @@ if (($_SESSION['role'] ?? '') !== 'superadmin') {
     exit;
 }
 $name = $_SESSION['display_name'] ?? 'Super Admin';
+
+require_once __DIR__ . '/../config/database.php';
+$logs = [];
+if ($pdo->query("SHOW TABLES LIKE 'attendance_logs'")->rowCount()) {
+    $stmt = $pdo->query('SELECT al.*, u.full_name, o.name AS office_name FROM attendance_logs al JOIN employees e ON al.employee_id = e.id JOIN users u ON e.user_id = u.id JOIN offices o ON al.office_id = o.id ORDER BY al.log_date DESC, al.time_in DESC LIMIT 100');
+    $logs = $stmt->fetchAll();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,16 +29,12 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2"><div class="eg-logo-box">E</div></div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">E-GOES</div>
-          <div class="text-uppercase eg-wordmark-bottom">Solutions</div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-5">SuperAdmin-<?= htmlspecialchars($name) ?></div>
@@ -47,7 +50,7 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
           </div>
           <nav class="nav flex-column gap-1">
             <a href="dashboard.php" class="eg-sidebar-link">
-              <i class="bi bi-grid-1x2"></i>
+              <i class="bi bi-speedometer2"></i>
               <span>Dashboard</span>
             </a>
             <a href="offices.php" class="eg-sidebar-link">
@@ -55,8 +58,8 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
               <span>Offices</span>
             </a>
             <a href="employees.php" class="eg-sidebar-link">
-              <i class="bi bi-person-badge"></i>
-              <span>Employee Accounts</span>
+              <i class="bi bi-people"></i>
+              <span>Employees</span>
             </a>
             <a href="payroll.php" class="eg-sidebar-link">
               <i class="bi bi-currency-dollar"></i>
@@ -92,22 +95,20 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Office A</td>
-                  <td>Jane Bagonia</td>
-                  <td>Mar 9, 2026</td>
-                  <td>08:00 AM</td>
-                  <td>05:00 PM</td>
-                  <td>Present</td>
-                </tr>
-                <tr>
-                  <td>Office B</td>
-                  <td>Robert Cruz</td>
-                  <td>Mar 9, 2026</td>
-                  <td>08:12 AM</td>
-                  <td>05:04 PM</td>
-                  <td>Present</td>
-                </tr>
+                <?php if (empty($logs)): ?>
+                  <tr><td colspan="6" class="text-muted text-center py-4">No attendance records yet. Data from scans will appear here.</td></tr>
+                <?php else: ?>
+                  <?php foreach ($logs as $log): ?>
+                    <tr>
+                      <td><?= htmlspecialchars($log['office_name']) ?></td>
+                      <td><?= htmlspecialchars($log['full_name']) ?></td>
+                      <td><?= date('M j, Y', strtotime($log['log_date'])) ?></td>
+                      <td><?= $log['time_in'] ? date('h:i A', strtotime($log['time_in'])) : '—' ?></td>
+                      <td><?= $log['time_out'] ? date('h:i A', strtotime($log['time_out'])) : '—' ?></td>
+                      <td><?= htmlspecialchars($log['status']) ?></td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
@@ -116,3 +117,9 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
     </div>
   </body>
 </html>
+
+
+
+
+
+

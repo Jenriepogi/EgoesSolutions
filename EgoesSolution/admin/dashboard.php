@@ -5,6 +5,19 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
     exit;
 }
 $name = $_SESSION['display_name'] ?? 'Admin';
+$officeId = $_SESSION['office_id'] ?? null;
+
+require_once __DIR__ . '/../config/database.php';
+$totalEmployees = 0;
+$todayPresent = 0;
+$scansToday = 0;
+$lateArrivals = 0;
+$recentLogs = [];
+if ($officeId) {
+    $stmt = $pdo->prepare('SELECT COUNT(*) FROM users WHERE role = "employee" AND office_id = ?');
+    $stmt->execute([$officeId]);
+    $totalEmployees = (int) $stmt->fetchColumn();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,24 +35,12 @@ $name = $_SESSION['display_name'] ?? 'Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-4">
@@ -87,25 +88,25 @@ $name = $_SESSION['display_name'] ?? 'Admin';
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Total Employees</div>
-                <div class="fw-bold fs-3">96</div>
+                <div class="fw-bold fs-3"><?= $totalEmployees ?></div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Today Present</div>
-                <div class="fw-bold fs-3 text-success">88</div>
+                <div class="fw-bold fs-3 text-success"><?= $todayPresent ?></div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Attendance Scans Today</div>
-                <div class="fw-bold fs-3 text-warning">76</div>
+                <div class="fw-bold fs-3 text-warning"><?= $scansToday ?></div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Late Arrivals</div>
-                <div class="fw-bold fs-5 text-danger">4</div>
+                <div class="fw-bold fs-5 text-danger"><?= $lateArrivals ?></div>
               </div>
             </div>
           </div>
@@ -113,46 +114,9 @@ $name = $_SESSION['display_name'] ?? 'Admin';
           <div class="eg-panel">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="mb-0">Recent Scanning Activity</h5>
-              <a href="scan.php" class="small text-decoration-none"
-                >Open scanner</a
-              >
+              <a href="scan.php" class="small text-decoration-none">Open scanner</a>
             </div>
-            <div class="table-responsive">
-              <table class="table table-sm align-middle mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th>Employee</th>
-                    <th>Date</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Jane Bagonia</td>
-                    <td>Mar 4, 2026</td>
-                    <td>08:00 AM</td>
-                    <td>05:00 PM</td>
-                    <td><span class="badge bg-success">Present</span></td>
-                  </tr>
-                  <tr>
-                    <td>Robert Cruz</td>
-                    <td>Mar 4, 2026</td>
-                    <td>08:15 AM</td>
-                    <td>05:10 PM</td>
-                    <td><span class="badge bg-success">Present</span></td>
-                  </tr>
-                  <tr>
-                    <td>David Dela Cruz</td>
-                    <td>Mar 4, 2026</td>
-                    <td>—</td>
-                    <td>—</td>
-                    <td><span class="badge bg-danger">Absent</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <p class="text-muted small mb-0">Attendance data will appear here once loaded from the database.</p>
           </div>
         </main>
       </div>
@@ -165,5 +129,10 @@ $name = $_SESSION['display_name'] ?? 'Admin';
     ></script>
   </body>
 </html>
+
+
+
+
+
 
 

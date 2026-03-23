@@ -25,29 +25,10 @@ $name = $_SESSION['display_name'] ?? 'Employee';
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
   <body class="bg-light">
-    <header class="eg-topbar d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
-      </div>
-      <div class="d-flex align-items-center me-3">
-        <div class="me-2 fw-bold fs-4">
-          Hi <?= htmlspecialchars($name) ?>!
-        </div>
-        <div class="eg-avatar-circle"></div>
-      </div>
-    </header>
+    <?php
+    $name = $_SESSION['display_name'] ?? 'Employee';
+    include __DIR__ . '/includes/header.php';
+    ?>
 
     <div class="container-fluid py-4">
       <nav class="eg-employee-nav mb-4">
@@ -59,31 +40,17 @@ $name = $_SESSION['display_name'] ?? 'Employee';
           <i class="bi bi-receipt"></i>
           <span>Payslip Archive</span>
         </a>
+        <a href="../auth/logout.php" class="eg-employee-nav-link eg-employee-nav-link-danger">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Logout</span>
+        </a>
       </nav>
 
       <div class="eg-panel">
         <h5 class="mb-3">My Payslip Archive</h5>
-        <div class="list-group">
-          <?php
-          $payslips = [
-              'Sep 30, 2025 Payslip',
-              'Oct 30, 2025 Payslip',
-              'Nov 30, 2025 Payslip',
-              'Dec 30, 2025 Payslip',
-          ];
-          foreach ($payslips as $label): ?>
-            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-              <div>
-                <div><?= htmlspecialchars($label) ?></div>
-                <div class="text-muted small">Download PDF</div>
-              </div>
-              <div class="text-end">
-                <div>₱7,000.00</div>
-                <div class="text-muted small">Net</div>
-              </div>
-            </a>
-          <?php endforeach; ?>
-        </div>
+        <p class="text-muted small mb-0">
+          Payslip records will appear here once they are loaded from the database.
+        </p>
       </div>
     </div>
 

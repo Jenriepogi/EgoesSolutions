@@ -5,6 +5,15 @@ if (($_SESSION['role'] ?? '') !== 'admin') {
     exit;
 }
 $name = $_SESSION['display_name'] ?? 'Admin';
+$officeId = $_SESSION['office_id'] ?? null;
+
+require_once __DIR__ . '/../config/database.php';
+$employees = [];
+if ($officeId) {
+    $stmt = $pdo->prepare('SELECT id, full_name, email FROM users WHERE role = "employee" AND office_id = ? ORDER BY full_name');
+    $stmt->execute([$officeId]);
+    $employees = $stmt->fetchAll();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,24 +31,12 @@ $name = $_SESSION['display_name'] ?? 'Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-5">
@@ -77,28 +74,27 @@ $name = $_SESSION['display_name'] ?? 'Admin';
 
         <main class="col-12 col-md-9 col-lg-10 py-4">
           <h3 class="mb-4 fw-bold">All Employees</h3>
+          <p class="text-muted small mb-3">Only SuperAdmin can create employee accounts. Data is loaded from the database.</p>
           <div class="row g-3">
-            <?php
-            // simple static loop for prototype cards
-            $employees = array_fill(0, 12, [
-                'name' => 'Jeriz Bagonia',
-                'position' => 'Team Leader',
-            ]);
-            foreach ($employees as $emp): ?>
-              <div class="col-6 col-md-4 col-lg-3">
-                <div class="eg-employee-card">
-                  <div class="d-flex align-items-center mb-2">
-                    <div class="eg-avatar-circle me-2"></div>
-                    <div>
-                      <div class="fw-semibold"><?= htmlspecialchars($emp['name']) ?></div>
-                      <div class="text-muted small"><?= htmlspecialchars($emp['position']) ?></div>
+            <?php if (empty($employees)): ?>
+              <div class="col-12">
+                <p class="text-muted">No employees yet. SuperAdmin creates employee accounts in Employee Accounts.</p>
+              </div>
+            <?php else: ?>
+              <?php foreach ($employees as $emp): ?>
+                <div class="col-6 col-md-4 col-lg-3">
+                  <div class="eg-employee-card">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="eg-avatar-circle me-2"></div>
+                      <div>
+                        <div class="fw-semibold"><?= htmlspecialchars($emp['full_name']) ?></div>
+                        <div class="text-muted small"><?= htmlspecialchars($emp['email']) ?></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="text-muted small">Position</div>
-                  <div class="fw-semibold small"><?= htmlspecialchars($emp['position']) ?></div>
                 </div>
-              </div>
-            <?php endforeach; ?>
+              <?php endforeach; ?>
+            <?php endif; ?>
           </div>
         </main>
       </div>
@@ -111,5 +107,10 @@ $name = $_SESSION['display_name'] ?? 'Admin';
     ></script>
   </body>
 </html>
+
+
+
+
+
 
 

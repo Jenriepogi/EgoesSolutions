@@ -5,13 +5,17 @@ if (($_SESSION['role'] ?? '') !== 'superadmin') {
     exit;
 }
 $name = $_SESSION['display_name'] ?? 'Super Admin';
+
+require_once __DIR__ . '/../config/database.php';
+$stmt = $pdo->query('SELECT id, full_name, email FROM users WHERE role = "employee" ORDER BY full_name');
+$employees = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Super Admin - Employee Accounts</title>
+    <title>Super Admin - Employees</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -22,24 +26,12 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-5">
@@ -57,7 +49,7 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
           </div>
           <nav class="nav flex-column gap-1">
             <a href="dashboard.php" class="eg-sidebar-link">
-              <i class="bi bi-grid-1x2"></i>
+              <i class="bi bi-speedometer2"></i>
               <span>Dashboard</span>
             </a>
             <a href="offices.php" class="eg-sidebar-link">
@@ -65,8 +57,8 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
               <span>Offices</span>
             </a>
             <a href="employees.php" class="eg-sidebar-link active">
-              <i class="bi bi-person-badge"></i>
-              <span>Employee Accounts</span>
+              <i class="bi bi-people"></i>
+              <span>Employees</span>
             </a>
             <a href="payroll.php" class="eg-sidebar-link">
               <i class="bi bi-currency-dollar"></i>
@@ -88,47 +80,46 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
         </aside>
 
         <main class="col-12 col-md-9 col-lg-10 py-4">
-          <h3 class="mb-3 fw-bold">Employee Accounts</h3>
+          <h3 class="mb-3 fw-bold">Employees</h3>
           <p class="text-muted mb-4">Create and manage employee login accounts.</p>
           <div class="eg-panel p-3 mb-4">
             <h5 class="mb-3">Create Employee Account</h5>
+            <p class="text-muted small mb-3">Only SuperAdmin can create accounts. Form will save to database when wired.</p>
             <div class="row g-3">
               <div class="col-md-4">
-                <input class="form-control" placeholder="Full Name" />
+                <input class="form-control" name="full_name" placeholder="Full Name" />
               </div>
               <div class="col-md-3">
-                <input class="form-control" placeholder="Username" />
+                <input class="form-control" name="email" placeholder="Email" />
               </div>
               <div class="col-md-3">
-                <input type="password" class="form-control" placeholder="Password" />
+                <input type="password" class="form-control" name="password" placeholder="Password" />
               </div>
               <div class="col-md-2 d-grid">
-                <button class="btn btn-primary">Create</button>
+                <button type="button" class="btn btn-primary" disabled>Create (wire to DB)</button>
               </div>
             </div>
           </div>
           <div class="row g-3">
-            <?php
-            // simple static loop for prototype cards
-            $employees = array_fill(0, 12, [
-                'name' => 'Jeriz Bagonia',
-                'position' => 'Team Leader',
-            ]);
-            foreach ($employees as $emp): ?>
-              <div class="col-6 col-md-4 col-lg-3">
-                <div class="eg-employee-card">
-                  <div class="d-flex align-items-center mb-2">
-                    <div class="eg-avatar-circle me-2"></div>
-                    <div>
-                      <div class="fw-semibold"><?= htmlspecialchars($emp['name']) ?></div>
-                      <div class="text-muted small"><?= htmlspecialchars($emp['position']) ?></div>
+            <?php if (empty($employees)): ?>
+              <div class="col-12">
+                <p class="text-muted">No Employees yet. Create one above when form is wired to database.</p>
+              </div>
+            <?php else: ?>
+              <?php foreach ($employees as $emp): ?>
+                <div class="col-6 col-md-4 col-lg-3">
+                  <div class="eg-employee-card">
+                    <div class="d-flex align-items-center mb-2">
+                      <div class="eg-avatar-circle me-2"></div>
+                      <div>
+                        <div class="fw-semibold"><?= htmlspecialchars($emp['full_name']) ?></div>
+                        <div class="text-muted small"><?= htmlspecialchars($emp['email']) ?></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="text-muted small">Position</div>
-                  <div class="fw-semibold small"><?= htmlspecialchars($emp['position']) ?></div>
                 </div>
-              </div>
-            <?php endforeach; ?>
+              <?php endforeach; ?>
+            <?php endif; ?>
           </div>
         </main>
       </div>
@@ -141,5 +132,11 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
     ></script>
   </body>
 </html>
+
+
+
+
+
+
 
 

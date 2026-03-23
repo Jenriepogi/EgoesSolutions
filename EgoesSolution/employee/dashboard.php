@@ -25,29 +25,10 @@ $name = $_SESSION['display_name'] ?? 'Employee';
     <link rel="stylesheet" href="../assets/css/style.css" />
   </head>
   <body class="bg-light">
-    <header class="eg-topbar d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
-      </div>
-      <div class="d-flex align-items-center me-3">
-        <div class="me-2 fw-bold fs-4">
-          Hi <?= htmlspecialchars($name) ?>!
-        </div>
-        <div class="eg-avatar-circle"></div>
-      </div>
-    </header>
+    <?php
+    $name = $_SESSION['display_name'] ?? 'Employee';
+    include __DIR__ . '/includes/header.php';
+    ?>
 
     <div class="container-fluid py-4">
       <nav class="eg-employee-nav mb-4">
@@ -59,56 +40,27 @@ $name = $_SESSION['display_name'] ?? 'Employee';
           <i class="bi bi-receipt"></i>
           <span>Payslip Archive</span>
         </a>
+        <a href="../auth/logout.php" class="eg-employee-nav-link eg-employee-nav-link-danger">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Logout</span>
+        </a>
       </nav>
 
       <div class="row g-3">
         <div class="col-lg-4">
           <div class="eg-panel">
             <h5 class="mb-3">My Earnings</h5>
-            <p class="text-muted small mb-2">(Current Period: Feb 1–31)</p>
-            <div class="mb-1"><strong>Total Hours:</strong> 164h</div>
-            <div class="mb-1"><strong>Estimated Gross Pay:</strong> ₱12,000.00</div>
-            <div class="mb-3">
-              <strong>Deductions (Benefits &amp; Cash Advance):</strong> ₱3,000.00
-            </div>
-            <div class="mb-3">
-              <strong>Estimated Net Pay:</strong>
-              <span class="fs-4">₱9,000</span>
-            </div>
-            <button class="btn btn-primary">Details</button>
+            <p class="text-muted small mb-2">Current period details will appear here once connected to the database.</p>
+            <div class="text-muted small">No payroll data available yet.</div>
           </div>
         </div>
 
         <div class="col-lg-8">
           <div class="eg-panel">
-            <h5 class="mb-3">My Attendance (Feb 2026)</h5>
-            <!-- Simple colored dots to mimic prototype -->
-            <div class="table-responsive">
-              <table class="table table-borderless align-middle text-center mb-0">
-                <thead>
-                  <tr>
-                    <th class="text-start">Sun</th>
-                    <th>Mon</th>
-                    <th>Tue</th>
-                    <th>Wed</th>
-                    <th>Thu</th>
-                    <th>Fri</th>
-                    <th>Sat</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="text-start"><span class="eg-dot eg-dot-gray"></span></td>
-                    <td><span class="eg-dot eg-dot-green"></span></td>
-                    <td><span class="eg-dot eg-dot-green"></span></td>
-                    <td><span class="eg-dot eg-dot-green"></span></td>
-                    <td><span class="eg-dot eg-dot-green"></span></td>
-                    <td><span class="eg-dot eg-dot-red"></span></td>
-                    <td><span class="eg-dot eg-dot-yellow"></span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <h5 class="mb-3">My Attendance</h5>
+            <p class="text-muted small mb-0">
+              Attendance records will be loaded from the database once tracking is connected.
+            </p>
           </div>
         </div>
       </div>

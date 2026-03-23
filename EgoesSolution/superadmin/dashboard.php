@@ -5,6 +5,14 @@ if (($_SESSION['role'] ?? '') !== 'superadmin') {
     exit;
 }
 $name = $_SESSION['display_name'] ?? 'Super Admin';
+
+require_once __DIR__ . '/../config/database.php';
+$totalOffices = (int) $pdo->query('SELECT COUNT(*) FROM offices')->fetchColumn();
+$totalEmployees = (int) $pdo->query('SELECT COUNT(*) FROM users WHERE role = "employee"')->fetchColumn();
+$totalAttendanceToday = 0;
+if ($pdo->query("SHOW TABLES LIKE 'attendance_logs'")->rowCount()) {
+    $totalAttendanceToday = (int) $pdo->query("SELECT COUNT(*) FROM attendance_logs WHERE DATE(log_date) = CURDATE()")->fetchColumn();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,24 +30,12 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/style.css?v=blue1" />
   </head>
   <body class="bg-light">
     <header class="eg-topbar d-flex justify-content-between align-items-center">
       <div class="d-flex align-items-center">
-        <div class="me-2">
-          <div class="eg-logo-box">
-            E
-          </div>
-        </div>
-        <div>
-          <div class="fw-bold eg-wordmark-top">
-            E-GOES
-          </div>
-          <div class="text-uppercase eg-wordmark-bottom">
-            Solutions
-          </div>
-        </div>
+        <img src="../assets/images/egoes-logo.png?v=3" alt="E-GOES Solutions" class="eg-system-logo" />
       </div>
       <div class="d-flex align-items-center me-3">
         <div class="me-2 fw-bold fs-4">Hi <?= htmlspecialchars($name) ?>!</div>
@@ -55,7 +51,7 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
           </div>
           <nav class="nav flex-column gap-1">
             <a href="dashboard.php" class="eg-sidebar-link active">
-              <i class="bi bi-grid-1x2"></i>
+              <i class="bi bi-speedometer2"></i>
               <span>Dashboard</span>
             </a>
             <a href="offices.php" class="eg-sidebar-link">
@@ -63,8 +59,8 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
               <span>Offices</span>
             </a>
             <a href="employees.php" class="eg-sidebar-link">
-              <i class="bi bi-person-badge"></i>
-              <span>Employee Accounts</span>
+              <i class="bi bi-people"></i>
+              <span>Employees</span>
             </a>
             <a href="payroll.php" class="eg-sidebar-link">
               <i class="bi bi-currency-dollar"></i>
@@ -88,32 +84,32 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
         <main class="col-12 col-md-9 col-lg-10 py-4">
           <h3 class="fw-bold">Super Admin Dashboard</h3>
           <p class="text-muted mb-4">
-            Manage all offices, employee accounts, payroll, barcodes, and attendance records.
+            Manage all offices, Employees, payroll, barcodes, and attendance records.
           </p>
 
           <div class="row g-3">
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Total Offices</div>
-                <div class="fw-bold fs-4">5</div>
+                <div class="fw-bold fs-4"><?= $totalOffices ?></div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
-                <div class="text-muted small">Employee Accounts</div>
-                <div class="fw-bold fs-4">96</div>
+                <div class="text-muted small">Employees</div>
+                <div class="fw-bold fs-4"><?= $totalEmployees ?></div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Payroll Batch Status</div>
-                <div class="fw-bold fs-5 text-warning">In Progress</div>
+                <div class="fw-bold fs-5 text-muted">—</div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="eg-metric-card">
                 <div class="text-muted small">Attendance Logs Today</div>
-                <div class="fw-bold fs-4">88</div>
+                <div class="fw-bold fs-4"><?= $totalAttendanceToday ?></div>
               </div>
             </div>
           </div>
@@ -128,5 +124,11 @@ $name = $_SESSION['display_name'] ?? 'Super Admin';
     ></script>
   </body>
 </html>
+
+
+
+
+
+
 
 
